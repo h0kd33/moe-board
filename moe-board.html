@@ -1,23 +1,84 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../moe-style/moe-style.html">
 <link rel="import" href="../moe-article-list/moe-article-list.html">
 <link rel="import" href="../moe-board-header/moe-board-header.html">
+<link rel="import" href="../moe-media-query/moe-media-query.html">
+<link rel="import" href="../moe-article/moe-article.html">
 <dom-module id="moe-board">
     <style>
     :host {
         display: block;
         box-sizing: border-box;
+        background-color: var(--background-color);
+        /*@apply(--user-select-disable);*/
     }
-    #header {
-        
+    
+    :host([queryState=mobile]) {
+        --moe-comment-font-size: 12px;
     }
+    
+    #header {}
+    
     #articleList {
         margin: 0 auto 45px auto;
     }
+    
+    #board[scape=full] {
+        @apply(--scape-full);
+    }
+    
+    #board[scape=default] {
+        @apply(--scape-default);
+        @apply(--layout-center);
+    }
+    
+    #navbar {
+        --paper-toolbar-background: rgba(255, 255, 255, 0.3);
+        --paper-toolbar-color: var(--font-color);
+    }
     </style>
     <template>
-        <moe-board-header id="header"></moe-board-header>
-        <moe-article-list id="articleList"></moe-article-list>
+        <moe-media-query on-querystate-changed="_queryState"></moe-media-query>
+        <paper-drawer-panel disable-swipe right-drawer force-narrow drawer-width="100vw" id="drawerPanel" on-selected-changed="_articleDrawerOpend">
+            <!-- 抽屜：右：文章閱讀器 -->
+            <paper-header-panel drawer id="drawer">
+                <paper-toolbar justify="justified">
+                    <paper-icon-button icon="icons:arrow-back" on-tap="_closeArticle">
+                    </paper-icon-button>
+                    <div style="text-align: left;">
+                        <span>回應模式</span>
+                    </div>
+                    <paper-icon-button icon="icons:reply" on-tap="_closeArticle">
+                    </paper-icon-button>
+                </paper-toolbar>
+                <!-- 放置在 drawer 中的文章 -->
+                <moe-article> </moe-article>
+            </paper-header-panel>
+            <!-- 主要：版面 -->
+            <paper-scroll-header-panel id="main" main on-content-scroll="_onScroll">
+                <!-- 導覽列 -->
+                <paper-toolbar id="navbar" justify="justified">
+                    <paper-icon-button icon="menu" on-tap="_toggleParentDrawer"> </paper-icon-button>
+                    <div id="topLink" class="flex">
+                        <ul>
+                            <li><a href="#">anchor</a></li>
+                            <li><a href="#">background</a></li>
+                            <li><a href="#">dialog</a></li>
+                            <li><a href="#">element</a></li>
+                            <li><a href="#">frame</a></li>
+                        </ul>
+                    </div>
+                    <paper-icon-button data-dialog="scrolling" icon="icons:more-vert" on-click="clickHandler"> </paper-icon-button>
+                </paper-toolbar>
+                <!-- 版面 -->
+                <moe-board-header id="header"></moe-board-header>
+                <moe-article-list id="articleList" on-open-article="_openArticle"></moe-article-list>
+            </paper-scroll-header-panel>
+        </paper-drawer-panel>
     </template>
 </dom-module>
 <script>
@@ -26,13 +87,34 @@ Polymer({
     is: 'moe-board',
 
     properties: {
-
+        scape: {
+            type: String,
+            observer: '_scape'
+        },
+        queryState: {
+            type: String,
+            reflectToAttribute: true
+        },
+        articleDrawerOpend: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true
+        }
+    },
+    listeners: {
+        'drawer.track': '_onTrack'
     },
 
     ready: function() {
         this.loadArticles();
     },
-
+    // 捲到底部觸發 讀入文章陣列
+    addArticle: function() {
+        var t = this.$.articleList;
+        t.push('articles', t.articles[0]);
+        t.push('articles', t.articles[0]);
+        t.push('articles', t.articles[0]);
+    },
     loadArticles: function() {
         this.$.articleList.articles = [{
             BOARDNAME: "綜合二",
@@ -143,6 +225,87 @@ Polymer({
                 REPLYCOUNT: "2"
             }]
         }];
+    },
+    // 捲動至下方剩下兩個螢幕高時 載入文章
+    _onScroll: function(e) {
+        var t = this;
+        var docY = e.target.scroller.scrollHeight; // scroll panel height
+        var screenY = window.screen.height; // brower window height
+        var winTop = e.target.scroller.scrollTop; // scroll panel offsetTop position 
+        // console.log(docY + ' | ' + screenY + ' | ' + winTop + ' | ' + (docY - screenY * 2));
+        (docY - screenY * 2) <= winTop ? t.addArticle() : console.log('error');
+    },
+    // 調整版面 width 固定寬度 | 100%
+    _scape: function(e) {
+        switch (e) {
+            case 'scape-full':
+                this.toggleAttribute('scape', 'full', this.$.board);
+                break;
+            case 'scape-default':
+                this.toggleAttribute('scape', 'default', this.$.board);
+                break;
+        }
+    },
+    _openArticle: function() {
+        this.$.drawerPanel.openDrawer();
+    },
+    _closeArticle: function() {
+        this.$.drawerPanel.closeDrawer();
+    },
+    _toggleParentDrawer: function() {
+        this.fire('toggle-parent-drawer');
+    },
+
+    // 回傳 文章閱讀抽屜開啟狀態
+    _articleDrawerOpend: function(e) {
+        this.articleDrawerOpend = e.detail.value === 'drawer' ? true : false;
+    },
+
+    // 改寫 drawer-panel 的 Track Event 給 右方 article drawer panel 
+    _onTrack: function(e) {
+        var t = this.$.drawerPanel;
+        var x = e.detail.x;
+        var dx = e.detail.dx;
+        switch (e.detail.state) {
+            case 'start':
+                if (x <= 30) {
+                    console.log('start');
+                    t._setDragging(true);
+                }
+
+                break;
+            case 'track':
+                if (t.dragging) {
+                    t.transition = false;
+                    t._moveDrawer(t._translateXForDeltaX(x));
+                    console.log('track');
+                }
+                break;
+            case 'end':
+                if (t.dragging) {
+                    var xDirection = dx > (t.offsetWidth / 2);
+                    t.transition = true;
+                    t._setDragging(false);
+                    t._moveDrawer(null);
+                    t[xDirection ? 'closeDrawer' : 'openDrawer']();
+                    console.log('end');
+                }
+                break;
+        }
+    },
+    // 監控 media query 調整 queryState propertie
+    _queryState: function(e) {
+        switch (e.detail.value) {
+            case 'desktop':
+                this.queryState = '';
+                break;
+            case 'mobile-portrait':
+                this.queryState = 'mobile';
+                break;
+            case 'mobile-landscape':
+                this.queryState = 'mobile';
+                break;
+        }
     }
 });
 </script>
