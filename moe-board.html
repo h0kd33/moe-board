@@ -7,7 +7,6 @@
 <link rel="import" href="../moe-article-list/moe-article-list.html">
 <link rel="import" href="../moe-board-header/moe-board-header.html">
 <link rel="import" href="../moe-media-query/moe-media-query.html">
-<link rel="import" href="../moe-article/moe-article.html">
 <dom-module id="moe-board">
     <style>
     :host {
@@ -56,7 +55,7 @@
                     </paper-icon-button>
                 </paper-toolbar>
                 <!-- 放置在 drawer 中的文章 -->
-                <moe-article> </moe-article>
+                <p> Moe-article </p>
             </paper-header-panel>
             <!-- 主要：版面 -->
             <paper-scroll-header-panel id="main" main on-content-scroll="_onScroll">
@@ -75,7 +74,7 @@
                     <paper-icon-button data-dialog="scrolling" icon="icons:more-vert" on-click="clickHandler"> </paper-icon-button>
                 </paper-toolbar>
                 <!-- 版面 -->
-                <moe-board-header id="header"></moe-board-header>
+                <!-- <moe-board-header id="header"></moe-board-header> -->
                 <moe-article-list id="articleList" on-open-article="_openArticle"></moe-article-list>
             </paper-scroll-header-panel>
         </paper-drawer-panel>
@@ -112,117 +111,82 @@ Polymer({
     addArticle: function() {
         var t = this.$.articleList;
         t.push('articles', t.articles[0]);
-        t.push('articles', t.articles[0]);
-        t.push('articles', t.articles[0]);
     },
     loadArticles: function() {
         this.$.articleList.articles = [{
-            BOARDNAME: "綜合二",
             serial: 54764654,
             identity: 'dIW12Afc',
-            commenttitle: "不會游泳怎麼辦?",
+            commentTitle: "不會游泳怎麼辦?",
             username: "無名",
-            CONTENT: '<a href="http://homu.komica.org/00/index.php?res=6503972">http://homu.komica.org/00/index.php?res=6503972</a><br><blockquote>會說初音過氣八成對這塊認識也不深</blockquote>有什麼數據來證明初音還沒過氣阿?<br>新投稿的作品數和再生數都逐年激減了耶<br> 布丁好吃',
+            content: '<a href="http://homu.komica.org/00/index.php?res=6503972">http://homu.komica.org/00/index.php?res=6503972</a><br><blockquote>會說初音過氣八成對這塊認識也不深</blockquote>有什麼數據來證明初音還沒過氣阿?<br>新投稿的作品數和再生數都逐年激減了耶<br> 布丁好吃',
             comments: [{
-                BOARDNAME: "綜合二",
-                POINT: 123456,
-                SWATCHES: 1,
-                TITLE: "不會游泳怎麼辦?",
-                NAME: "無名",
-                CONTENT: '<a href="http://homu.komica.org/00/index.php?res=6503972">http://homu.komica.org/00/index.php?res=6503972</a><br><blockquote>會說初音過氣八成對這塊認識也不深</blockquote>有什麼數據來證明初音還沒過氣阿?<br>新投稿的作品數和再生數都逐年激減了耶<br> 布丁好吃',
+                serial: 123456,
+                commentTitle: "不會游泳怎麼辦?",
+                userName: "無名",
+                content: '<a href="http://homu.komica.org/00/index.php?res=6503972">http://homu.komica.org/00/index.php?res=6503972</a><br><blockquote>會說初音過氣八成對這塊認識也不深</blockquote>有什麼數據來證明初音還沒過氣阿?<br>新投稿的作品數和再生數都逐年激減了耶<br> 布丁好吃',
                 imgNo: "01",
-                REPLYCOUNT: "32"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 123456,
-                SWATCHES: 1,
-                TITLE: "不會游泳怎麼辦?",
-                NAME: "無名",
-                CONTENT: "<a class='post-number'>NO.1234</a>不會游泳，現在要進去海陸新訓了........<br>覺這一年當兵生活會很慘",
+                serial: 123456,
+                commentTitle: "不會游泳怎麼辦?",
+                userName: "無名",
+                content: "<a class='post-number'>NO.1234</a>不會游泳，現在要進去海陸新訓了........<br>覺這一年當兵生活會很慘",
                 imgNo: "01",
-                REPLYCOUNT: "32"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 45623,
-                SWATCHES: 5,
-                TITLE: "ㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZ",
-                NAME: "ㄈㄓZ",
-                CONTENT: "李嫌和王女原本約在高鐵台南站見面，因鄰居發現王母失蹤",
+                serial: 45623,
+                commentTitle: "ㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZㄈㄓZ",
+                userName: "ㄈㄓZ",
+                content: "李嫌和王女原本約在高鐵台南站見面，因鄰居發現王母失蹤",
                 imgNo: "02",
-                REPLYCOUNT: "2",
+
                 CLASS: "highlight"
             }, {
-                BOARDNAME: "新聞速報",
-                POINT: "78,645,456",
-                SWATCHES: 3,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "外來種賤女狗公惱羞開始血尿跳針哭哭ㄛwwwwww<br>護航乙",
+                serial: "78,645,456",
+                commentTitle: "",
+                userName: "",
+                content: "外來種賤女狗公惱羞開始血尿跳針哭哭ㄛwwwwww<br>護航乙",
                 imgNo: "03",
-                REPLYCOUNT: "8"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 456456,
-                SWATCHES: 4,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "<blockquote>搞不好李搞不好李搞不好李搞不好李搞不好李搞</blockquote>不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李w好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李嫌跟王女真的有交往過<br>因為某某原因而否認了<br>就跟以前認識某女明明就有暗示我告白<br>結果我沒告白就到處抹黒我說我有嚴重妄想症一樣",
+                serial: 456456,
+                commentTitle: "",
+                userName: "",
+                content: "<blockquote>搞不好李搞不好李搞不好李搞不好李搞不好李搞</blockquote>不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李w好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李搞不好李嫌跟王女真的有交往過<br>因為某某原因而否認了<br>就跟以前認識某女明明就有暗示我告白<br>結果我沒告白就到處抹黒我說我有嚴重妄想症一樣",
                 imgNo: "04",
-                REPLYCOUNT: "21"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 353453,
-                SWATCHES: 7,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "無本文",
+                serial: 353453,
+                commentTitle: "",
+                userName: "",
+                content: "無本文",
                 imgNo: "15",
-                REPLYCOUNT: "84"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 453,
-                SWATCHES: 8,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "<a href='#'>www.google.com</a>為什麼支那賤畜一聽到台灣女生說話就射啦<br>我剛剛無聊上百度搜尋台灣女生，發現很多426很哈台灣的劍",
+                serial: 453,
+                commentTitle: "",
+                userName: "",
+                content: "<a href='#'>www.google.com</a>為什麼支那賤畜一聽到台灣女生說話就射啦<br>我剛剛無聊上百度搜尋台灣女生，發現很多426很哈台灣的劍",
                 imgNo: "16",
-                REPLYCOUNT: "32"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 123456,
-                SWATCHES: 3,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "問一下 問答板為什麼只能設3個問題? 我看其他人都25題耶",
+                serial: 123456,
+                commentTitle: "",
+                userName: "",
+                content: "問一下 問答板為什麼只能設3個問題? 我看其他人都25題耶",
                 imgNo: "17",
-                REPLYCOUNT: "4"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 453453,
-                SWATCHES: 2,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "有島民學過速讀嗎?<br>我想要自學卻不知道要怎麼入門",
+                serial: 453453,
+                commentTitle: "",
+                userName: "",
+                content: "有島民學過速讀嗎?<br>我想要自學卻不知道要怎麼入門",
                 imgNo: "18",
-                REPLYCOUNT: "3"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 51245,
-                SWATCHES: 3,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "有島民知道拿熱水沖屁眼完5分鐘在拿冷水沖是什麼感覺嗎",
+                serial: 51245,
+                commentTitle: "",
+                userName: "",
+                content: "有島民知道拿熱水沖屁眼完5分鐘在拿冷水沖是什麼感覺嗎",
                 imgNo: "",
-                REPLYCOUNT: "0"
             }, {
-                BOARDNAME: "綜合二",
-                POINT: 7857853435,
-                SWATCHES: 1,
-                TITLE: "",
-                NAME: "",
-                CONTENT: "有什麼地方可以吹冷氣又有插座?",
+                serial: 7857853435,
+                commentTitle: "",
+                userName: "",
+                content: "有什麼地方可以吹冷氣又有插座?",
                 imgNo: "20",
-                REPLYCOUNT: "2"
             }]
         }];
     },
