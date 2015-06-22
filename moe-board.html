@@ -6,6 +6,7 @@
 <link rel="import" href="../moe-style/moe-style.html">
 <link rel="import" href="../moe-article-list/moe-article-list.html">
 <link rel="import" href="../moe-board-header/moe-board-header.html">
+<link rel="import" href="../moe-board-header/moe-board-header.html">
 <link rel="import" href="../moe-media-query/moe-media-query.html">
 <dom-module id="moe-board">
     <style>
@@ -33,6 +34,10 @@
     #board[scape=default] {
         @apply(--scape-default);
         @apply(--layout-center);
+    }
+    #boardContainer {
+        max-width: 1280px;
+        margin: 0 auto;
     }
     
     #navbar {
@@ -74,8 +79,10 @@
                     <paper-icon-button data-dialog="scrolling" icon="icons:more-vert" on-click="clickHandler"> </paper-icon-button>
                 </paper-toolbar>
                 <!-- 版面 -->
-                <!-- <moe-board-header id="header"></moe-board-header> -->
-                <moe-article-list id="articleList" on-open-article="_openArticle"></moe-article-list>
+                <div id="boardContainer">
+                    <moe-board-header minimize></moe-board-header>
+                    <moe-article-list id="articleList" on-open-article="_openArticle"></moe-article-list>
+                </div>
             </paper-scroll-header-panel>
         </paper-drawer-panel>
     </template>
@@ -192,12 +199,12 @@ Polymer({
         var articleList = this.$.articleList;
 
         fetch("http://beta.json-generator.com/api/json/get/JhsqrBk")
-        .then(function(response) {
-            return response.json();      
-        })
-        .then(function(json) {
-            articleList.articles = json;
-        });
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(json) {
+                // articleList.articles = json;
+            });
     },
     // 捲動至下方剩下兩個螢幕高時 載入文章
     _onScroll: function(e) {
