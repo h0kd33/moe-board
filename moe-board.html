@@ -189,6 +189,15 @@ Polymer({
                 imgNo: "20",
             }]
         }];
+        var articleList = this.$.articleList;
+
+        fetch("http://beta.json-generator.com/api/json/get/JhsqrBk")
+        .then(function(response) {
+            return response.json();      
+        })
+        .then(function(json) {
+            articleList.articles = json;
+        });
     },
     // 捲動至下方剩下兩個螢幕高時 載入文章
     _onScroll: function(e) {
