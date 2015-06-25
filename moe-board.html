@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../moe-style/moe-style.html">
 <link rel="import" href="../moe-article-list/moe-article-list.html">
+<link rel="import" href="../moe-article/moe-article.html">
 <link rel="import" href="../moe-board-header/moe-board-header.html">
 <link rel="import" href="../moe-board-header/moe-board-header.html">
 <link rel="import" href="../moe-media-query/moe-media-query.html">
@@ -48,7 +49,9 @@
     <template>
         <moe-media-query on-querystate-changed="_queryState"></moe-media-query>
         <paper-drawer-panel disable-swipe right-drawer force-narrow drawer-width="100vw" id="drawerPanel" on-selected-changed="_articleDrawerOpend">
-            <!-- 抽屜：右：文章閱讀器 -->
+            <!--
+            <   抽屜：右：文章閱讀器 
+            <-->
             <paper-header-panel drawer id="drawer">
                 <paper-toolbar justify="justified">
                     <paper-icon-button icon="icons:arrow-back" on-tap="_closeArticle">
@@ -60,9 +63,11 @@
                     </paper-icon-button>
                 </paper-toolbar>
                 <!-- 放置在 drawer 中的文章 -->
-                <p> Moe-article </p>
+                <moe-article> </moe-article>
             </paper-header-panel>
-            <!-- 主要：版面 -->
+            <!-- 
+            <   主要：版面 
+            <-->
             <paper-scroll-header-panel id="main" main on-content-scroll="_onScroll">
                 <!-- 導覽列 -->
                 <paper-toolbar id="navbar" justify="justified">
@@ -113,6 +118,10 @@ Polymer({
 
     ready: function() {
         this.loadArticles();
+        // 預防 Tab 跳轉到 drawer
+        // ps 有讓tab在drawer裡面完全失效的可能性 有待改進
+        // http://stackoverflow.com/questions/15552974/is-there-a-way-to-disable-tab-on-a-input-type-text
+        this.$.drawer.addEventListener('keydown', function(e){ if (e.keyCode == 9)  e.preventDefault() ; });
     },
     // 捲到底部觸發 讀入文章陣列
     addArticle: function() {
@@ -213,7 +222,7 @@ Polymer({
         var screenY = window.screen.height; // brower window height
         var winTop = e.target.scroller.scrollTop; // scroll panel offsetTop position 
         // console.log(docY + ' | ' + screenY + ' | ' + winTop + ' | ' + (docY - screenY * 2));
-        (docY - screenY * 2) <= winTop ? t.addArticle() : console.log('error');
+        (docY - screenY * 2) <= winTop ? t.addArticle() : false;
     },
     // 調整版面 width 固定寬度 | 100%
     _scape: function(e) {
@@ -249,7 +258,6 @@ Polymer({
         switch (e.detail.state) {
             case 'start':
                 if (x <= 30) {
-                    console.log('start');
                     t._setDragging(true);
                 }
 
@@ -258,7 +266,6 @@ Polymer({
                 if (t.dragging) {
                     t.transition = false;
                     t._moveDrawer(t._translateXForDeltaX(x));
-                    console.log('track');
                 }
                 break;
             case 'end':
@@ -268,7 +275,6 @@ Polymer({
                     t._setDragging(false);
                     t._moveDrawer(null);
                     t[xDirection ? 'closeDrawer' : 'openDrawer']();
-                    console.log('end');
                 }
                 break;
         }
