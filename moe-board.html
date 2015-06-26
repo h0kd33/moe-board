@@ -59,11 +59,11 @@
                     <div style="text-align: left;">
                         <span>回應模式</span>
                     </div>
-                    <paper-icon-button icon="icons:reply" on-tap="_closeArticle">
+                    <paper-icon-button icon="icons:reply" on-tap="openReplyForm">
                     </paper-icon-button>
                 </paper-toolbar>
                 <!-- 放置在 drawer 中的文章 -->
-                <moe-article> </moe-article>
+                <moe-article id="article"> </moe-article>
             </paper-header-panel>
             <!-- 
             <   主要：版面 
@@ -214,6 +214,9 @@ Polymer({
             .then(function(json) {
                 // articleList.articles = json;
             });
+    },
+    openReplyForm: function( ){
+        this.$.article.openReplyForm();
     },
     // 捲動至下方剩下兩個螢幕高時 載入文章
     _onScroll: function(e) {
